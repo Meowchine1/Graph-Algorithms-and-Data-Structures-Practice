@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtdGraph", "AtdGraph\AtdGraph.csproj", "{F18440C0-0DEE-4D3A-9666-5BEB162DA810}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleGraph", "ConsoleGraph\ConsoleGraph.csproj", "{6928E02F-1D07-4C6F-9179-BB0C8E25E915}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F18440C0-0DEE-4D3A-9666-5BEB162DA810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F18440C0-0DEE-4D3A-9666-5BEB162DA810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F18440C0-0DEE-4D3A-9666-5BEB162DA810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F18440C0-0DEE-4D3A-9666-5BEB162DA810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6928E02F-1D07-4C6F-9179-BB0C8E25E915}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6928E02F-1D07-4C6F-9179-BB0C8E25E915}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6928E02F-1D07-4C6F-9179-BB0C8E25E915}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6928E02F-1D07-4C6F-9179-BB0C8E25E915}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CFB3EEF-BA32-4A43-9BEB-6ABAAEFB3F5C}
+	EndGlobalSection
+EndGlobal

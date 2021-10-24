@@ -1,0 +1,8 @@
+$
+a b 3 c 4
+b b 1
+c d 10 e 14
+d
+e
+f g 2
+g
