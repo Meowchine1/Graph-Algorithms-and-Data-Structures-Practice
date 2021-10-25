@@ -138,5 +138,14 @@ namespace AtdGraph
         
         }
 
+      
+
+        public static void BFS(GraphType g, string v, ref List<string> res, List<string> stoptop)
+        {
+            res = new List<string>();
+            g.BFS(v, ref res, stoptop);
+
+        }
+
     }
 }

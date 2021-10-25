@@ -13,7 +13,23 @@ namespace AtdGraph
         private bool _weighted = false;
         private Dictionary<string, Dictionary<string, double>> _graph = new Dictionary<string,
             Dictionary<string, double>>();
+        private Dictionary<string, bool> _visited;
 
+        public Dictionary<string, bool> Visited
+        {
+            get { return _visited; }
+            set { _visited = value;}
+        
+        }
+        public void VisitedSet()
+        {
+            _visited = new Dictionary<string, bool>();
+            foreach (var elem in _graph.Keys)
+            {
+                _visited.Add(elem, true);
+            
+            }
+        }
         public bool Orientation 
         {
             get { return _orientation; } 
@@ -44,7 +60,7 @@ namespace AtdGraph
                 {
                     tempLine = InputFile.ReadLine();
                     string[] mas = tempLine.Split(' ');
-                    string data = mas[0];
+                    string data = mas[0];                   
                     Dictionary<string, double> adjacency = new Dictionary<string, double>();
 
                     for (int i = 1; i < mas.Length; i += i_step)
@@ -55,18 +71,22 @@ namespace AtdGraph
                     _graph.Add(data, adjacency);
                 }
             }
+            VisitedSet();
 
         }
-
+        public GraphType(Dictionary<string, Dictionary<string, double>> g)
+        {
+            _graph = g;
+                    
+        }
         public GraphType(GraphType g) // конструктор копирования
         {
             _weighted = g._weighted;
             _orientation = g._orientation;
             _graph = new Dictionary<string, Dictionary<string, double>>();
-
             foreach (var elem in g._graph)
             {
-                _graph.Add(elem.Key, elem.Value);   //new Dictionary<T, double>(v.Value))
+                _graph.Add(elem.Key, elem.Value);   
             }
 
         }
@@ -362,8 +382,44 @@ namespace AtdGraph
             }
         
         }
-   
+        // Найти путь, соединяющий вершины u и v и не проходящий через заданное подмножество вершин V.
+        public void BFS(string v, ref List<string> res , List<string> stoptop)
+        {
+            VisitedSet();
+            string tmp;
+            Queue<string> que = new Queue<string>();
+            que.Enqueue(v);
+            while (que.Count != 0)
+            {
+                tmp = que.Dequeue();             
+                if (stoptop.Contains(tmp))
+                {
+                    continue;
+                }
+                
+
+                if (!_visited[tmp])// была посещена
+                {
+                    continue;
+                }
+                _visited[tmp] = false;
+                res.Add(tmp);
+                foreach (var elem in _graph[tmp])
+                {
+                    if (_visited[elem.Key] )
+                    {
+                        que.Enqueue(elem.Key);
+                    }
+                
+                
+                }
+
+                
+            }
+        }
+
         #endregion
+
 
 
     }

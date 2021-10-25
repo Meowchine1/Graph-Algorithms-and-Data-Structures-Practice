@@ -29,7 +29,9 @@ namespace AtdGraph
                               "6. Показать меню\n" +
                               "7. Выйти из программы\n"+
                               "8 Степень исхода\n"+
-                              "9 CanGetNodeThroughOneNode");
+                              "9 CanGetNodeThroughOneNode\n"+
+                              "10 DFS FindWay Without {V}\n+" +
+                              "11 test bfs");
         }
         static void ReadKey()
         {
@@ -133,7 +135,51 @@ namespace AtdGraph
 
                         break;
                     }
-                default:
+                case (10):
+                    {
+
+                      
+
+                        break;
+                    }
+
+                case (11):
+                    {
+
+
+                        Console.WriteLine("Enter start top");
+                        string start = Console.ReadLine();                       
+                        Console.WriteLine("Enter end top");
+                        string end = Console.ReadLine();
+                        Console.WriteLine("Enter stop tops ");
+                        List<string> stop = new List<string>();
+                        string[] stp = Console.ReadLine().Split(' ');
+                        foreach (var elem in stp)
+                        {
+                            stop.Add(elem);                        
+                        }
+
+                        List<string> res = new List<string>();
+                        Console_GraphType.BFS(graph, start, ref res, stop);
+                        Console.WriteLine("=====================================");
+                        if (res.Contains(end))
+                        {
+                            foreach (var elem in res)
+                            {
+                               
+                                Console.WriteLine(elem);
+                                if (elem == end) break;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Way isnt exist");
+                        
+                        }
+                        break;
+                    }
+
+                        default:
                     {
                         Console.WriteLine("Введено некорректное действие");
                         Console.WriteLine();

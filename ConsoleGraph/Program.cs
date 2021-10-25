@@ -37,12 +37,12 @@ namespace AtdGraph
             //NondirectedWeighted
             //notD notW 
             //nw nd
-            string end = @"\data\NondirectedWeighted.txt";
+            string end = @"\data\nw nd.txt";
             string path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
             string end2 = @"\data\notD notW .txt";
             GraphType g1 = new GraphType(path+end);
-            GraphType g2 = new GraphType(path + end2);
-            g1.Obedinenie(g2);
+         // GraphType g2 = new GraphType(path + end2);
+          //g1.Obedinenie(g2);
            
             ConsoleInterfase.Start(g1);
         }
