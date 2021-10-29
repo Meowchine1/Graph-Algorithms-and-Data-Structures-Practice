@@ -30,8 +30,8 @@ namespace AtdGraph
                               "7. Выйти из программы\n"+
                               "8 Степень исхода\n"+
                               "9 CanGetNodeThroughOneNode\n"+
-                              "10 DFS FindWay Without {V}\n+" +
-                              "11 test bfs");
+                              "10 test Acycle\n"+
+                              "11 test bfs\n");
         }
         static void ReadKey()
         {
@@ -137,12 +137,22 @@ namespace AtdGraph
                     }
                 case (10):
                     {
+                        Console.WriteLine("Введите вершину ");
+                        string v = Console.ReadLine();
+                        if (Console_GraphType.Acycle(graph, v))
+                        {
+                            Console.WriteLine("Acyclic");
 
-                      
+                        }
+                        else
+                        {
+                            Console.WriteLine("Cyclic");
+                        }
+
+
 
                         break;
                     }
-
                 case (11):
                     {
 

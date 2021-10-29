@@ -147,5 +147,17 @@ namespace AtdGraph
 
         }
 
+
+        public static bool Acycle(GraphType g, string v)
+        {
+            g.Acycle_start(v);
+            if (g.Color.ContainsValue(GraphType.Colors.black))
+            {
+                return false;
+            }
+            else return true;
+        
+        }
+
     }
 }

@@ -56,10 +56,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="data\DirectedNonweighted.txt" />
-    <Content Include="data\DirectedWeighted.txt" />
-    <Content Include="data\NondirectedWeighted.txt" />
-    <Content Include="data\notD notW .txt" />
+    <Content Include="data\Acykle.txt" />
+    <Content Include="data\d.txt" />
+    <Content Include="data\dw.txt" />
+    <Content Include="data\nd_w.txt" />
+    <Content Include="data\nd_nw.txt" />
     <Content Include="data\nw nd.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

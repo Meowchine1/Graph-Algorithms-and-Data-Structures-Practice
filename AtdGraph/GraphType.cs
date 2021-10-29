@@ -14,13 +14,30 @@ namespace AtdGraph
         private Dictionary<string, Dictionary<string, double>> _graph = new Dictionary<string,
             Dictionary<string, double>>();
         private Dictionary<string, bool> _visited;
+        private Dictionary<string, Colors> _color;
 
+      public  enum Colors : int
+        {
+            white,
+            grey,
+            black
+        
+        }
         public Dictionary<string, bool> Visited
         {
             get { return _visited; }
             set { _visited = value;}
         
         }
+
+        public Dictionary<string, Colors> Color
+        {
+            get { return _color; }
+            set { _color = value; }
+
+        }
+
+
         public void VisitedSet()
         {
             _visited = new Dictionary<string, bool>();
@@ -30,6 +47,17 @@ namespace AtdGraph
             
             }
         }
+
+        public void ColorSet()
+        {
+            _color = new Dictionary<string, Colors>();
+            foreach (var elem in _graph.Keys)
+            {
+                _color.Add(elem, Colors.white);
+
+            }
+        }
+
         public bool Orientation 
         {
             get { return _orientation; } 
@@ -72,6 +100,7 @@ namespace AtdGraph
                 }
             }
             VisitedSet();
+            ColorSet();
 
         }
         public GraphType(Dictionary<string, Dictionary<string, double>> g)
@@ -417,6 +446,86 @@ namespace AtdGraph
                 
             }
         }
+
+
+        
+
+        public void Acycle_start(string v)
+        {
+            ColorSet();
+            VisitedSet();
+            _color[v] = Colors.grey;
+            _visited[v] = false;
+            while (_visited.ContainsValue(true))
+            {
+                foreach (var elem in _graph[v])
+                {
+                    if (_visited[elem.Key])
+                    {
+                        Acycle(elem.Key, v);
+
+                    }
+
+                }
+
+                foreach (var elem in _visited)
+                {
+                    if (elem.Value)
+                    {
+                        v = elem.Key;
+                    
+                    }
+                }
+            }
+
+        }
+        public void Acycle(string  v , string vst)
+        {
+            _visited[v] = false;
+            _color[v] = Colors.grey;
+
+            foreach (var elem in _graph[v])
+            {
+                if (elem.Key != vst && _color[elem.Key] == Colors.grey)
+                {
+                    _color[v] = Colors.black;
+                    // cykle is finded
+                    break;
+
+                }
+                else
+                    if (_visited[elem.Key])
+                {
+                    Acycle(elem.Key, v);
+                }
+            
+            }
+            
+
+
+        }
+
+
+        public void DFS(string v, ref List<string> res)
+        {
+
+            VisitedSet();
+            dfs(v, ref res);
+        }
+        public void dfs(string v, ref List<string> res)
+        {
+            _visited[v] = false;
+            res.Add(v);
+            foreach (var elem in _graph[v])
+            {
+                if (_visited[elem.Key])
+                {
+                    dfs(elem.Key, ref res);
+                }
+            }
+            
+        }
+
 
         #endregion
 
