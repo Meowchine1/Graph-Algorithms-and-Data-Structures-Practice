@@ -6,7 +6,27 @@ using System.ComponentModel;
 
 namespace AtdGraph
 {
-  
+
+    public class Edje : IComparable<Edje>
+    {
+        public string start;
+        public string end;
+        public double weight;
+        public int CompareTo(Edje x)
+        {
+            if (weight < x.weight)
+            {
+                return -1;
+            }
+            if (weight > x.weight)
+            {
+                return 1;
+            }
+            return 0;
+        }
+    }
+
+
     public class GraphType
     {   
         private bool _orientation = false; 
@@ -15,6 +35,9 @@ namespace AtdGraph
             Dictionary<string, double>>();
         private Dictionary<string, bool> _visited;
         private Dictionary<string, Colors> _color;
+        private List<Edje> _edges;
+       
+
 
       public  enum Colors : int
         {
@@ -29,6 +52,14 @@ namespace AtdGraph
             set { _visited = value;}
         
         }
+
+        public List<Edje> Edges
+        {
+            get { return _edges; }
+            set { _edges = value; }
+
+        }
+
 
         public Dictionary<string, Colors> Color
         {
@@ -88,17 +119,19 @@ namespace AtdGraph
                 {
                     tempLine = InputFile.ReadLine();
                     string[] mas = tempLine.Split(' ');
-                    string data = mas[0];                   
+                    string data = mas[0];
                     Dictionary<string, double> adjacency = new Dictionary<string, double>();
 
                     for (int i = 1; i < mas.Length; i += i_step)
                     {
                         string adj = mas[i];
                         adjacency.Add(adj, _weighted ? double.Parse(mas[i + 1]) : 1); //value
+                       
                     }
                     _graph.Add(data, adjacency);
                 }
             }
+
             VisitedSet();
             ColorSet();
 
@@ -479,7 +512,7 @@ namespace AtdGraph
             }
 
         }
-        public void Acycle(string  v , string vst)
+        private void Acycle(string  v , string vst)
         {
             _visited[v] = false;
             _color[v] = Colors.grey;
@@ -512,8 +545,9 @@ namespace AtdGraph
             VisitedSet();
             dfs(v, ref res);
         }
-        public void dfs(string v, ref List<string> res)
+        private void dfs(string v, ref List<string> res)
         {
+            
             _visited[v] = false;
             res.Add(v);
             foreach (var elem in _graph[v])
@@ -526,7 +560,71 @@ namespace AtdGraph
             
         }
 
+        private List<Edje> MakeEdjes()
+        {
+            List<Edje> tempArr = new List<Edje>();
+            foreach (var i in _graph)
+            {
+                foreach (var j in i.Value)
+                {
+                    
+                        bool need = true;
+                        foreach (Edje check in tempArr)
+                        {
+                            if (check.end == i.Key && check.start == j.Key)
+                            {
+                                need = false;
+                                break;
+                            }
+                        }
 
+                        if (need)
+                        {
+                            Edje tempEdje = new Edje();
+                            tempEdje.start = i.Key;
+                            tempEdje.end = j.Key;
+                            tempEdje.weight = j.Value;
+                            tempArr.Add(tempEdje);
+                        }
+                    
+                }
+            }
+            return tempArr;
+        }
+
+        public List<Edje> Kraskal()
+        {        
+            _edges = MakeEdjes();
+            _edges.Sort();
+            Dictionary<string, double> comp = new Dictionary<string, double>();
+            int count = 0;
+            foreach (var i in _graph)
+            {
+                comp.Add(i.Key, count);
+                ++count;
+            }
+            List<Edje> ansArr = new List<Edje>();
+            foreach (Edje i in _edges)
+            {
+                double weight = i.weight;
+                string start = i.start;
+                string end = i.end;
+                if (comp[start] != comp[end]) 
+                {
+                    ansArr.Add(i);
+                    double a = comp[start];
+                    double b = comp[end];
+                    foreach (var j in _graph)
+                    {
+                        if (comp[j.Key] == b)
+                        {
+                            comp[j.Key] = a;
+                        }
+                    }
+                }
+            }
+            return ansArr;
+        }
         #endregion
 
 

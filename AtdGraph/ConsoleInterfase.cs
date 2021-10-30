@@ -31,7 +31,8 @@ namespace AtdGraph
                               "8 Степень исхода\n"+
                               "9 CanGetNodeThroughOneNode\n"+
                               "10 test Acycle\n"+
-                              "11 test bfs\n");
+                              "11 test bfs\n"+
+                              "12 Kraskal \n");
         }
         static void ReadKey()
         {
@@ -194,6 +195,19 @@ namespace AtdGraph
                         Console.WriteLine("Введено некорректное действие");
                         Console.WriteLine();
                         break;
+                    }
+                case (12):
+                    {
+                        Console.WriteLine("Минимальный остов");
+                        List<Edje> res = graph.Kraskal();
+                        foreach (var elem in res)
+                        {
+                            Console.WriteLine("start: {0} => {1}  weight = {2}",elem.start, elem.end, elem.weight);
+                        
+                        }
+
+                        break;
+                    
                     }
             }
         }

@@ -159,5 +159,10 @@ namespace AtdGraph
         
         }
 
+        public static List<Edje> Kraskal(GraphType g)
+        {
+            return g.Kraskal();
+        }
+
     }
 }

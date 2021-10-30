@@ -13,7 +13,7 @@ namespace AtdGraph
         static void Main(string[] args)
         {
 
-            string end = @"\data\Acykle.txt";
+            string end = @"\data\nd_w.txt";
             string path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
             GraphType g1 = new GraphType(path+end);           
             ConsoleInterfase.Start(g1);
