@@ -512,6 +512,8 @@ namespace AtdGraph
             }
 
         }
+
+      //  Проверить, является ли заданный орграф ацикличным.
         private void Acycle(string  v , string vst)
         {
             _visited[v] = false;
@@ -522,7 +524,7 @@ namespace AtdGraph
                 if (elem.Key != vst && _color[elem.Key] == Colors.grey)
                 {
                     _color[v] = Colors.black;
-                    // cykle is finded
+                    // cyсle is finded
                     break;
 
                 }
@@ -560,6 +562,10 @@ namespace AtdGraph
             
         }
 
+
+        //Дан взвешенный неориентированный граф из N вершин и M ребер. Требуется найти в нем каркас минимального веса. Алгоритмм Краскала
+
+       
         private List<Edje> MakeEdjes()
         {
             List<Edje> tempArr = new List<Edje>();
