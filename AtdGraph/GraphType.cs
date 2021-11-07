@@ -7,57 +7,33 @@ using System.ComponentModel;
 namespace AtdGraph
 {
 
-    public class Edje : IComparable<Edje>
-    {
-        public string start;
-        public string end;
-        public double weight;
-        public int CompareTo(Edje x)
-        {
-            if (weight < x.weight)
-            {
-                return -1;
-            }
-            if (weight > x.weight)
-            {
-                return 1;
-            }
-            return 0;
-        }
-    }
-
-
     public class GraphType
     {   
         private bool _orientation = false; 
         private bool _weighted = false;
-        private Dictionary<string, Dictionary<string, double>> _graph = new Dictionary<string,
-            Dictionary<string, double>>();
+        private Dictionary<string, Dictionary<string, double>>
+            _graph = new Dictionary<string, Dictionary<string, double>>();
         private Dictionary<string, bool> _visited;
         private Dictionary<string, Colors> _color;
         private List<Edje> _edges;
        
-
-
       public  enum Colors : int
         {
             white,
             grey,
-            black
-        
+            black     
         }
+        #region Properties
         public Dictionary<string, bool> Visited
         {
             get { return _visited; }
-            set { _visited = value;}
-        
+            set { _visited = value;}        
         }
 
         public List<Edje> Edges
         {
             get { return _edges; }
             set { _edges = value; }
-
         }
 
 
@@ -68,14 +44,13 @@ namespace AtdGraph
 
         }
 
-
         public void VisitedSet()
         {
             _visited = new Dictionary<string, bool>();
             foreach (var elem in _graph.Keys)
             {
                 _visited.Add(elem, true);
-            
+
             }
         }
 
@@ -89,20 +64,23 @@ namespace AtdGraph
             }
         }
 
-        public bool Orientation 
+        public bool Orientation
         {
-            get { return _orientation; } 
-            set { _orientation = value; } 
+            get { return _orientation; }
+            set { _orientation = value; }
         }
         public bool Weighted
-        { 
-            get { return _weighted; }    
-            set { _weighted = value; } 
+        {
+            get { return _weighted; }
+            set { _weighted = value; }
         }
         public Dictionary<string, Dictionary<string, double>> Graph
         {
-            get { return _graph; } 
+            get { return _graph; }
         }
+
+        #endregion
+
 
         #region CONSTRUCRORS
         public GraphType() { }
@@ -631,10 +609,64 @@ namespace AtdGraph
             }
             return ansArr;
         }
+
+
+        public Dictionary<string, double> Dijkstra(string startV)
+        {
+            int size = _graph.Count;
+            Dictionary<string, double> distance = new Dictionary<string, double>();
+          Dictionary<string, string>  parents = new Dictionary<string, string>();
+           VisitedSet();
+
+            var comparer = Comparer<KeyValuePair<double, string>>.Create((x, y) => x.Key > y.Key ? 1 : x.Key < y.Key ? -1
+           : x.Value.CompareTo(y.Value));
+            SortedSet<KeyValuePair<double, string>> set = new SortedSet<KeyValuePair<double, string>>(comparer);
+
+            _visited[startV] = false;
+            foreach (var elem in _graph)
+            {
+                distance.Add(elem.Key ,double.MaxValue);
+                
+            }
+            distance[startV] =  0.0;
+            Queue<string> q = new Queue<string>();
+            q.Enqueue(startV);
+            parents.Add(startV, startV);
+
+            while (!(q.Count == 0) )
+            {
+                string vertex = q.Dequeue();
+                
+
+                foreach (var elem in _graph[vertex])
+                 {
+                    if ( _graph[vertex][elem.Key] + distance[vertex] < distance[elem.Key])
+                    {
+                        distance[elem.Key] = elem.Value + distance[vertex];
+                        q.Enqueue(elem.Key);
+
+                    }
+                }
+                _visited[vertex] = false;
+            }
+
+
+            return distance;
+
+        }
+
+
+       
+
         #endregion
 
 
 
     }
-
+    class Dijkstra
+    {
+        public double Prise { get; set; }
+        public Dictionary<string, string> Previous { get; set; }
+    
+    }
 }

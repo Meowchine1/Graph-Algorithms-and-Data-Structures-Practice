@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 namespace AtdGraph
 {
   public class ConsoleInterfase
@@ -32,7 +31,9 @@ namespace AtdGraph
                               "9 CanGetNodeThroughOneNode\n"+
                               "10 test Acycle\n"+
                               "11 test bfs\n"+
-                              "12 Kraskal \n");
+                              "12 Kraskal \n" +
+                               "13 Djkstra \n"+
+                               "14 4A8 \n");
         }
         static void ReadKey()
         {
@@ -209,6 +210,35 @@ namespace AtdGraph
                         break;
                     
                     }
+                case (13):
+                    {
+                        Console.Write("Sourse node = ");
+                        Dictionary<string, double> res = graph.Dijkstra(Console.ReadLine());
+                        foreach (var elem in res)
+                        {
+                            Console.WriteLine("{0}  =  {1}",elem.Key, elem.Value);
+                        }
+
+                        break;
+
+                    }
+                case (14):
+                    {
+                        Console.Write("Sourse node = ");
+                        string sourseNode = Console.ReadLine();
+                        Console.Write("N = ");
+                        double n = double.Parse(Console.ReadLine());
+
+                        Dictionary<string, double> res = Console_GraphType.Djkstra_4A8(graph, sourseNode, n);
+                        foreach (var elem in res)
+                        {
+                            Console.WriteLine("{0}  =  {1}", elem.Key, elem.Value);
+                        }
+
+                        break;
+
+                    }
+
             }
         }
     }

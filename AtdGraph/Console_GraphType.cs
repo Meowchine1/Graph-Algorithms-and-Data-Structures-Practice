@@ -164,5 +164,25 @@ namespace AtdGraph
             return g.Kraskal();
         }
 
+        public static Dictionary<string, double> Djkstra(GraphType g, string v) {
+
+            return g.Dijkstra(v);
+        }
+
+        public static Dictionary<string, double> Djkstra_4A8(GraphType g, string v, double n)
+        {
+            Dictionary<string, double> tmp =  g.Dijkstra(v);
+            Dictionary<string, double> res = new Dictionary<string, double>();
+            foreach (var elem in tmp)
+            {
+                if (elem.Value <= n)
+                {
+                    res.Add(elem.Key, elem.Value);
+                }
+            
+            }
+            return res;
+        }
+
     }
 }
