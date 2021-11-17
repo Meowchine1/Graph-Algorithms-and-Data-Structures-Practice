@@ -3,39 +3,70 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.ComponentModel;
+using System.Linq;
 
 namespace AtdGraph
 {
 
     public class GraphType
-    {   
-        private bool _orientation = false; 
+    {
+        private bool _orientation = false;
         private bool _weighted = false;
         private Dictionary<string, Dictionary<string, double>>
             _graph = new Dictionary<string, Dictionary<string, double>>();
         private Dictionary<string, bool> _visited;
         private Dictionary<string, Colors> _color;
         private List<Edje> _edges;
-       
-      public  enum Colors : int
+
+        public enum Colors : int
         {
             white,
             grey,
-            black     
+            black
         }
         #region Properties
         public Dictionary<string, bool> Visited
         {
             get { return _visited; }
-            set { _visited = value;}        
+            set { _visited = value; }
         }
 
         public List<Edje> Edges
         {
-            get { return _edges; }
+            get { return MakeEdjes(); }
             set { _edges = value; }
         }
+        private List<Edje> MakeEdjes()
+        {
+            List<Edje> tempArr = new List<Edje>();
+            foreach (var i in _graph)
+            {
+                foreach (var j in i.Value)
+                {
 
+                    bool need = true;
+                    foreach (Edje check in tempArr)
+                    {
+                        if (check.end == i.Key && check.start == j.Key)
+                        {
+                            need = false;
+                            break;
+                        }
+                    }
+
+                    if (need)
+                    {
+                        Edje tempEdje = new Edje();
+                        tempEdje.start = i.Key;
+                        tempEdje.end = j.Key;
+                        tempEdje.weight = j.Value;
+                        tempArr.Add(tempEdje);
+                    }
+
+                }
+            }
+            return tempArr;
+        }
 
         public Dictionary<string, Colors> Color
         {
@@ -104,7 +135,7 @@ namespace AtdGraph
                     {
                         string adj = mas[i];
                         adjacency.Add(adj, _weighted ? double.Parse(mas[i + 1]) : 1); //value
-                       
+
                     }
                     _graph.Add(data, adjacency);
                 }
@@ -112,12 +143,13 @@ namespace AtdGraph
 
             VisitedSet();
             ColorSet();
+            _edges = MakeEdjes();
 
         }
         public GraphType(Dictionary<string, Dictionary<string, double>> g)
         {
             _graph = g;
-                    
+
         }
         public GraphType(GraphType g) // конструктор копирования
         {
@@ -126,7 +158,7 @@ namespace AtdGraph
             _graph = new Dictionary<string, Dictionary<string, double>>();
             foreach (var elem in g._graph)
             {
-                _graph.Add(elem.Key, elem.Value);   
+                _graph.Add(elem.Key, elem.Value);
             }
 
         }
@@ -135,20 +167,20 @@ namespace AtdGraph
         #region METHODS
 
         public void AddTop(string top)
-        {           
+        {
             if (_graph.ContainsKey(top))
             {
                 throw new Exception("Top already exist. Operation doesnt execute.");
             }
-            else 
+            else
             {
-                 Dictionary<string, double> adj = new Dictionary<string, double>();
+                Dictionary<string, double> adj = new Dictionary<string, double>();
                 _graph.Add(top, adj);
             }
         }
 
         public void DeleteTop(string top)
-        {         
+        {
             if (_graph.ContainsKey(top))
             {
                 foreach (var elem in _graph)
@@ -172,7 +204,7 @@ namespace AtdGraph
         }
 
         public void AddEdge(string startTop, string endTop, double weight)
-        {           
+        {
             bool start_exist = _graph.ContainsKey(startTop);
             bool end_exist = _graph.ContainsKey(endTop);
 
@@ -207,7 +239,7 @@ namespace AtdGraph
 
         public void AddEdge(string startTop, string endTop)
         {
-            
+
             bool start_exist = _graph.ContainsKey(startTop);
             bool end_exist = _graph.ContainsKey(endTop);
 
@@ -237,12 +269,12 @@ namespace AtdGraph
                         }
                     }
                 }
-            }           
+            }
         }
 
         public void DeleteEdge(string startTop, string endTop)
         {
-           
+
             bool start_exist = _graph.ContainsKey(startTop);
             bool end_exist = _graph.ContainsKey(endTop);
 
@@ -278,7 +310,7 @@ namespace AtdGraph
                         }
                     }
                 }
-            }                 
+            }
         }
 
         public void WriteFile(string FilePath)
@@ -367,14 +399,14 @@ namespace AtdGraph
             if (nodes.Count == 0)
             {
                 throw new Exception("Нельзя дойти через одну вершину");
-                
+
             }
             else
             {
                 return nodes;
             }
 
-        
+
         }
 
         //1b  7) Построить орграф, являющийся объединением двух заданных.
@@ -387,7 +419,7 @@ namespace AtdGraph
                     foreach (var el in graph._graph[elem.Key])// добавление adjencies добавляемого графа  this.графу 
                     {
                         if (!this._graph[elem.Key].ContainsKey(el.Key) && this._graph.ContainsKey(el.Key))// если нет в. в списке смежности
-                            // но вершина  сущетсвует
+                                                                                                          // но вершина  сущетсвует
                         {
                             this._graph[elem.Key].Add(el.Key, el.Value);
                         }
@@ -395,7 +427,7 @@ namespace AtdGraph
                             if (!this._graph[elem.Key].ContainsKey(el.Key) && !this._graph.ContainsKey(el.Key))
                         {
                             Dictionary<string, double> adj = new Dictionary<string, double>();
-                            this._graph.Add(el.Key,adj);
+                            this._graph.Add(el.Key, adj);
                             this._graph[elem.Key].Add(el.Key, el.Value);
                         }
                     }
@@ -418,12 +450,12 @@ namespace AtdGraph
                     }*/
 
                 }
-            
+
             }
-        
+
         }
         // Найти путь, соединяющий вершины u и v и не проходящий через заданное подмножество вершин V.
-        public void BFS(string v, ref List<string> res , List<string> stoptop)
+        public void BFS(string v, ref List<string> res, List<string> stoptop)
         {
             VisitedSet();
             string tmp;
@@ -431,12 +463,12 @@ namespace AtdGraph
             que.Enqueue(v);
             while (que.Count != 0)
             {
-                tmp = que.Dequeue();             
+                tmp = que.Dequeue();
                 if (stoptop.Contains(tmp))
                 {
                     continue;
                 }
-                
+
 
                 if (!_visited[tmp])// была посещена
                 {
@@ -446,20 +478,20 @@ namespace AtdGraph
                 res.Add(tmp);
                 foreach (var elem in _graph[tmp])
                 {
-                    if (_visited[elem.Key] )
+                    if (_visited[elem.Key])
                     {
                         que.Enqueue(elem.Key);
                     }
-                
-                
+
+
                 }
 
-                
+
             }
         }
 
 
-        
+
 
         public void Acycle_start(string v)
         {
@@ -484,15 +516,15 @@ namespace AtdGraph
                     if (elem.Value)
                     {
                         v = elem.Key;
-                    
+
                     }
                 }
             }
 
         }
 
-      //  Проверить, является ли заданный орграф ацикличным.
-        private void Acycle(string  v , string vst)
+        //  Проверить, является ли заданный орграф ацикличным.
+        private void Acycle(string v, string vst)
         {
             _visited[v] = false;
             _color[v] = Colors.grey;
@@ -511,9 +543,9 @@ namespace AtdGraph
                 {
                     Acycle(elem.Key, v);
                 }
-            
+
             }
-            
+
 
 
         }
@@ -527,7 +559,7 @@ namespace AtdGraph
         }
         private void dfs(string v, ref List<string> res)
         {
-            
+
             _visited[v] = false;
             res.Add(v);
             foreach (var elem in _graph[v])
@@ -537,48 +569,15 @@ namespace AtdGraph
                     dfs(elem.Key, ref res);
                 }
             }
-            
+
         }
 
 
         //Дан взвешенный неориентированный граф из N вершин и M ребер. Требуется найти в нем каркас минимального веса. Алгоритмм Краскала
 
-       
-        private List<Edje> MakeEdjes()
-        {
-            List<Edje> tempArr = new List<Edje>();
-            foreach (var i in _graph)
-            {
-                foreach (var j in i.Value)
-                {
-                    
-                        bool need = true;
-                        foreach (Edje check in tempArr)
-                        {
-                            if (check.end == i.Key && check.start == j.Key)
-                            {
-                                need = false;
-                                break;
-                            }
-                        }
-
-                        if (need)
-                        {
-                            Edje tempEdje = new Edje();
-                            tempEdje.start = i.Key;
-                            tempEdje.end = j.Key;
-                            tempEdje.weight = j.Value;
-                            tempArr.Add(tempEdje);
-                        }
-                    
-                }
-            }
-            return tempArr;
-        }
-
         public List<Edje> Kraskal()
-        {        
-            _edges = MakeEdjes();
+        {
+
             _edges.Sort();
             Dictionary<string, double> comp = new Dictionary<string, double>();
             int count = 0;
@@ -593,7 +592,7 @@ namespace AtdGraph
                 double weight = i.weight;
                 string start = i.start;
                 string end = i.end;
-                if (comp[start] != comp[end]) 
+                if (comp[start] != comp[end])
                 {
                     ansArr.Add(i);
                     double a = comp[start];
@@ -615,32 +614,30 @@ namespace AtdGraph
         {
             int size = _graph.Count;
             Dictionary<string, double> distance = new Dictionary<string, double>();
-          Dictionary<string, string>  parents = new Dictionary<string, string>();
-           VisitedSet();
+            Dictionary<string, string> parents = new Dictionary<string, string>();
+            VisitedSet();
 
-            var comparer = Comparer<KeyValuePair<double, string>>.Create((x, y) => x.Key > y.Key ? 1 : x.Key < y.Key ? -1
-           : x.Value.CompareTo(y.Value));
-            SortedSet<KeyValuePair<double, string>> set = new SortedSet<KeyValuePair<double, string>>(comparer);
+
 
             _visited[startV] = false;
             foreach (var elem in _graph)
             {
-                distance.Add(elem.Key ,double.MaxValue);
-                
+                distance.Add(elem.Key, double.MaxValue);
+
             }
-            distance[startV] =  0.0;
+            distance[startV] = 0.0;
             Queue<string> q = new Queue<string>();
             q.Enqueue(startV);
             parents.Add(startV, startV);
 
-            while (!(q.Count == 0) )
+            while (!(q.Count == 0))
             {
                 string vertex = q.Dequeue();
-                
+
 
                 foreach (var elem in _graph[vertex])
-                 {
-                    if ( _graph[vertex][elem.Key] + distance[vertex] < distance[elem.Key])
+                {
+                    if (_graph[vertex][elem.Key] + distance[vertex] < distance[elem.Key])
                     {
                         distance[elem.Key] = elem.Value + distance[vertex];
                         q.Enqueue(elem.Key);
@@ -654,19 +651,186 @@ namespace AtdGraph
             return distance;
 
         }
+        //Определить, существует ли путь длиной не более L между двумя заданными вершинами графа.
+        public List<string> FordBel(string startV, string endV)
+        {
+            string neg_cykles = "";
+            Dictionary<string, double> distance = new Dictionary<string, double>();
+            Dictionary<string, string> parents = new Dictionary<string, string>();
+            foreach (var elem in _graph)
+            {
+                parents.Add(elem.Key, "");
+
+            }
+            parents[startV] = "0";
+
+            foreach (var elem in _graph)
+            {
+                distance.Add(elem.Key, double.MaxValue);
+
+            }
+            distance[startV] = 0.0;
+
+            for (int i = 0; i < _graph.Count; i++)
+            {
+                neg_cykles = "No";
+                for (int j = 0; j < _edges.Count; j++)
+                {
+                    double newWeight = distance[_edges[j].start] + _edges[j].weight;
+                    if (distance[_edges[j].end] > newWeight)
+                    {
+                        distance[_edges[j].end] = newWeight;
+                        parents[_edges[j].end] = _edges[j].start;
+                        neg_cykles = _edges[j].end;
+
+                    }
+
+                }
+
+            }
+
+            List<string> path = new List<string>();
+            if (!neg_cykles.Equals("No"))
+            {
+                string negV = neg_cykles;
+                for (int i = 0; i < _graph.Count; i++) // Эта вершина будет либо лежать          
+                {                                      // на цикле отрицательного веса, либо она достижима из него. Чтобы получить вершину,
+                    negV = parents[negV];              // которая гарантированно лежит на цикле, достаточно n раз пройти по предкам, начиная от вершины 
+                }
+                string cur = parents[negV];
+                while (cur != negV)
+                {
+                    path.Add(cur);
+                    cur = parents[cur];
+                }
+                path.Add(cur);
+                path.Add("Negative cykle:");
+                path.Reverse();
+            }
+
+            else
+            {
+                if (distance[endV] == double.MaxValue) { }
+                else
+                {
+                    path.Add(endV);
+                    string cur = parents[endV];
+                    while (cur != "0")
+                    {
+                        path.Add(cur);
+                        cur = parents[cur];
+                    }
+                    path.Reverse();
+
+                }
+
+            }
+            return path;
+
+        }
+
+        public Dictionary<string, Dictionary<string, double>> Floyd()
+        {
+            double[,] matrix = new double[_graph.Count, _graph.Count];
+            for (int i = 0; i < matrix.GetLength(1); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    if (i == j) matrix[i, j] = 0.0;
+                    else matrix[i, j] = double.MaxValue;
+                }
+            }
+            Dictionary<string, Dictionary<string, double>> d = new Dictionary<string, Dictionary<string, double>>();
+            Dictionary<string, uint> vertexEnum = new Dictionary<string, uint>(_graph.Count);
+            Dictionary<string, Dictionary<string, string>> parents = new Dictionary<string, Dictionary<string, string>>();
+            foreach (var v in _graph)
+            {
+                if (!vertexEnum.ContainsKey(v.Key))
+                {
+                    vertexEnum.Add(v.Key, (uint)vertexEnum.Count);
+
+                }
+
+                foreach (var adj in v.Value)
+                {
+                    if (!vertexEnum.ContainsKey(adj.Key))
+                    {
+                        vertexEnum.Add(adj.Key, (uint)vertexEnum.Count);
+                    }
+                    matrix[vertexEnum[v.Key], vertexEnum[adj.Key]] = adj.Value;
+
+                    if (!parents.ContainsKey(v.Key))
+                    {
+                        Dictionary<string, string> tmp = new Dictionary<string, string>();
+                        tmp.Add(v.Key, v.Key);
+                        tmp.Add(adj.Key, v.Key);
+                        parents.Add(v.Key, tmp);
+
+                        Dictionary<string, double> tmpD = new Dictionary<string, double>();
+                        tmpD.Add(v.Key, 0);
+                        tmpD.Add(adj.Key, adj.Value);
+                        d.Add(v.Key, tmpD);
+
+                    }
+                    else
+                    {
+                        parents[v.Key].Add(adj.Key, v.Key);
+                        d[v.Key].Add(adj.Key, adj.Value);
+                    }
+
+                }
+            }
+
+            for (int k = 0; k < matrix.GetLength(0); k++)
+            {
+                for (int i = 0; i < matrix.GetLength(0); i++)
+                {
+                    for (int j = 0; j < matrix.GetLength(0); j++)
+                    {
+                        if (matrix[i, k] + matrix[k, j] < matrix[i, j])
+                        {
+                            matrix[i, j] = matrix[i, k] + matrix[k, j];
+
+                            if (!parents.ContainsKey(vertexEnum.ElementAt(i).Key))
+                            {
+                                parents.Add(vertexEnum.ElementAt(i).Key, new Dictionary<string, string>());
+
+                                d.Add(vertexEnum.ElementAt(i).Key, new Dictionary<string, double>());
+                                d[vertexEnum.ElementAt(i).Key].Add(vertexEnum.ElementAt(j).Key, matrix[i, j]);
+
+                            }
+                            else
+                            {
+                                if (!parents[vertexEnum.ElementAt(i).Key].ContainsKey(vertexEnum.ElementAt(j).Key))
+                                {
+                                    parents[vertexEnum.ElementAt(i).Key].Add(vertexEnum.ElementAt(j).Key, vertexEnum.ElementAt(k).Key);
+
+                                    d[vertexEnum.ElementAt(i).Key].Add(vertexEnum.ElementAt(j).Key, matrix[i, j]);
+
+                                }
+                                else
+                                {
+                                    parents[vertexEnum.ElementAt(i).Key][vertexEnum.ElementAt(j).Key] = vertexEnum.ElementAt(k).Key;
+
+                                    d[vertexEnum.ElementAt(i).Key][vertexEnum.ElementAt(j).Key] = matrix[i, j];
+
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+            return d;
+        }
 
 
-       
+
 
         #endregion
 
 
 
-    }
-    class Dijkstra
-    {
-        public double Prise { get; set; }
-        public Dictionary<string, string> Previous { get; set; }
-    
     }
 }

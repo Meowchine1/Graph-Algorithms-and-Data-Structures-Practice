@@ -33,7 +33,8 @@ namespace AtdGraph
                               "11 test bfs\n"+
                               "12 Kraskal \n" +
                                "13 Djkstra \n"+
-                               "14 4A8 \n");
+                               "14 4A8 \n"+
+                               "15 Ford Bellman \n");
         }
         static void ReadKey()
         {
@@ -234,6 +235,20 @@ namespace AtdGraph
                         {
                             Console.WriteLine("{0}  =  {1}", elem.Key, elem.Value);
                         }
+
+                        break;
+
+                    }
+                case (15):
+                    {
+                        Console.Write("Start node = ");
+                        string startNode = Console.ReadLine();
+                        Console.Write("End node = ");
+                        string endNode = Console.ReadLine();
+                        Console.Write("Size limit = ");
+                       int sizeLim = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine(Console_GraphType.FordBel(graph, startNode, endNode, sizeLim));
 
                         break;
 

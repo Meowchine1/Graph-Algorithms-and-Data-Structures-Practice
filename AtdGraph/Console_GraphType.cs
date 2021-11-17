@@ -184,5 +184,34 @@ namespace AtdGraph
             return res;
         }
 
+        public static string FordBel(GraphType g, string startV, string endV, int maxSize)
+        {
+            string result = ""; 
+            List<string> path = g.FordBel(startV, endV);
+            if (path.Count == 0)
+            {
+                result = "Way is unreal";
+
+            }
+            else
+            {
+                if (path.Count > maxSize - 1)
+                {
+                    result = "Size limit error";
+                }
+                else
+                {
+                    foreach (var elem in path)
+                    {
+                        result += elem + "=>";
+                    }
+                   
+                }
+
+
+            }
+            return result;
+        }
+
     }
 }
