@@ -34,7 +34,8 @@ namespace AtdGraph
                               "12 Kraskal \n" +
                                "13 Djkstra \n"+
                                "14 4A8 \n"+
-                               "15 Ford Bellman \n");
+                               "15 Ford Bellman \n"+
+                               "16 Floyd \n");
         }
         static void ReadKey()
         {
@@ -253,7 +254,21 @@ namespace AtdGraph
                         break;
 
                     }
+                case (16):
+                    {
+                        Console.Write("Start node = ");
+                        string startNode = Console.ReadLine();
+                        Console.Write("Start node = ");
+                        string startNode2 = Console.ReadLine();
+                        Console.Write("End node = ");
+                        string endNode = Console.ReadLine();
+                       
 
+                        Console.WriteLine(Console_GraphType.Floyd(graph, startNode, endNode, startNode2));
+
+                        break;
+
+                    }
             }
         }
     }

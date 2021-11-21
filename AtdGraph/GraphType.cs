@@ -729,10 +729,10 @@ namespace AtdGraph
 
         }
 
-        public Dictionary<string, Dictionary<string, double>> Floyd()
+        public Dictionary<string, Dictionary<string, double>> Floyd(out Dictionary<string, Dictionary<string, string>> parents)
         {
             double[,] matrix = new double[_graph.Count, _graph.Count];
-            for (int i = 0; i < matrix.GetLength(1); i++)
+            for (int i = 0; i < matrix.GetLength(1); i++) 
             {
                 for (int j = 0; j < matrix.GetLength(0); j++)
                 {
@@ -740,14 +740,16 @@ namespace AtdGraph
                     else matrix[i, j] = double.MaxValue;
                 }
             }
+
             Dictionary<string, Dictionary<string, double>> d = new Dictionary<string, Dictionary<string, double>>();
             Dictionary<string, uint> vertexEnum = new Dictionary<string, uint>(_graph.Count);
-            Dictionary<string, Dictionary<string, string>> parents = new Dictionary<string, Dictionary<string, string>>();
-            foreach (var v in _graph)
+            parents = new Dictionary<string, Dictionary<string, string>>();
+
+            foreach (var v in _graph) // нумерация вершин
             {
                 if (!vertexEnum.ContainsKey(v.Key))
                 {
-                    vertexEnum.Add(v.Key, (uint)vertexEnum.Count);
+                    vertexEnum.Add(v.Key, (uint)vertexEnum.Count); 
 
                 }
 
@@ -761,12 +763,12 @@ namespace AtdGraph
 
                     if (!parents.ContainsKey(v.Key))
                     {
-                        Dictionary<string, string> tmp = new Dictionary<string, string>();
+                        Dictionary<string, string> tmp = new Dictionary<string, string>(); // parents
                         tmp.Add(v.Key, v.Key);
                         tmp.Add(adj.Key, v.Key);
                         parents.Add(v.Key, tmp);
 
-                        Dictionary<string, double> tmpD = new Dictionary<string, double>();
+                        Dictionary<string, double> tmpD = new Dictionary<string, double>(); //distance
                         tmpD.Add(v.Key, 0);
                         tmpD.Add(adj.Key, adj.Value);
                         d.Add(v.Key, tmpD);
@@ -781,7 +783,7 @@ namespace AtdGraph
                 }
             }
 
-            for (int k = 0; k < matrix.GetLength(0); k++)
+            for (int k = 0; k < matrix.GetLength(0); k++) // пути проходящие из i  через к в j
             {
                 for (int i = 0; i < matrix.GetLength(0); i++)
                 {
@@ -803,7 +805,7 @@ namespace AtdGraph
                             {
                                 if (!parents[vertexEnum.ElementAt(i).Key].ContainsKey(vertexEnum.ElementAt(j).Key))
                                 {
-                                    parents[vertexEnum.ElementAt(i).Key].Add(vertexEnum.ElementAt(j).Key, vertexEnum.ElementAt(k).Key);
+                                    parents[vertexEnum.ElementAt(i).Key].Add(vertexEnum.ElementAt(j).Key, vertexEnum.ElementAt(k).Key); // i parent k
 
                                     d[vertexEnum.ElementAt(i).Key].Add(vertexEnum.ElementAt(j).Key, matrix[i, j]);
 

@@ -213,5 +213,90 @@ namespace AtdGraph
             return result;
         }
 
+        public static string Floyd(GraphType g, string start1, string finish, string start2)
+        {
+            string result = "";
+            Stack<string> v = new Stack<string>();
+            Dictionary<string, Dictionary<string, string>> parents;
+            Dictionary<string, Dictionary<string, double>> distances = g.Floyd(out parents);
+            if (distances[start1].ContainsKey(finish))
+            {
+                result += start1 + "->";
+
+                string k1 ;
+              
+                string tmpstart = start1, tmpend = finish;
+                do
+                {
+
+                    k1 = parents[tmpstart][tmpend]; // посредник
+                    if (k1 == tmpstart && tmpend != finish)
+                    {
+                        tmpstart = tmpend;
+                        tmpend = v.Pop();
+                        result += tmpstart;
+                    }
+                    else
+                    {
+                        if (start1 == k1)
+                            break;
+                        else
+                        {
+                            v.Push(tmpend);
+                            tmpend = k1;
+                        }
+
+                    }
+                }
+                while (tmpend != finish);
+                result += finish + " = " + distances[start1][finish] + "\n";
+
+            }
+            else
+            {
+                result = "Empty";
+            }
+
+
+
+            if (distances[start2].ContainsKey(finish))
+            {
+                result += start2 + "->";
+
+                string k1;
+
+                string tmpstart = start2, tmpend = finish;
+                do
+                {
+
+                    k1 = parents[tmpstart][tmpend];
+                    if (k1 == tmpstart && tmpend != finish)
+                    {
+                        tmpstart = tmpend;
+                        tmpend = v.Pop();
+                        result += tmpstart;
+                    }
+                    else
+                    {
+                        if (start2 == k1)
+                            break;
+                        v.Push(tmpend);
+                        tmpend = k1;
+
+                    }
+                }
+                while (tmpend != finish);
+                result += "->" + finish + " = " + distances[start2][finish] + "\n";
+
+            }
+            else
+            {
+                result = "Empty";
+            }
+
+            // string k2 = parents[start2][finish];
+
+            return result;
+        }
     }
 }
