@@ -59,6 +59,7 @@
     <Content Include="data\Acykle.txt" />
     <Content Include="data\d.txt" />
     <Content Include="data\dw.txt" />
+    <Content Include="data\flow.txt" />
     <Content Include="data\FordBelm.txt" />
     <Content Include="data\FordBelmNeg.txt" />
     <Content Include="data\nd_w.txt" />

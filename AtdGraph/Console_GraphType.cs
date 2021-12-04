@@ -230,7 +230,7 @@ namespace AtdGraph
                 {
 
                     k1 = parents[tmpstart][tmpend]; // посредник
-                    if (k1 == tmpstart && tmpend != finish)
+                    if (k1 == tmpstart && tmpend != finish )
                     {
                         tmpstart = tmpend;
                         tmpend = v.Pop();
@@ -298,5 +298,12 @@ namespace AtdGraph
 
             return result;
         }
+
+        public static double MaxThread(GraphType g, string src, string dst) {
+           return g.Ford_Fulkerson(src, dst);
+            
+        
+        }
+
     }
 }

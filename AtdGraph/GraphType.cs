@@ -18,6 +18,8 @@ namespace AtdGraph
         private Dictionary<string, Colors> _color;
         private List<Edje> _edges;
 
+        private List<Vertex> _new_graph;
+
         public enum Colors : int
         {
             white,
@@ -827,9 +829,94 @@ namespace AtdGraph
             return d;
         }
 
+       
+        private bool Dfs(string src, string dst, ref List<Edje> path)
+        {
+
+            if (src == dst) return true;
+            if (_visited[src] == false) return false;
+            foreach (var v in _graph[src])
+            {
+                foreach (var edj in _edges)
+                {
+                    if (edj.start == src && edj.end == v.Key) //          это фигня надо поле в node
+                    {
+                        if (edj.residual_flow() <= 0) continue; // оставшаяся емкость
+                    }
+                    _visited[src] = false;
+                    if (Dfs(v.Key, dst, ref path)) {
+                        path.Add(edj);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private Edje get_edje(string src, string dst) {
+
+            foreach (var edj in _edges)
+            {
+                if (edj.start == src && edj.end == dst) {
+                    return edj;
+                }
+
+               }
+            return null;// shit
+        }
+
+
+        private string GetMaxVertex(string v) {
+
+            string res = "";
+            foreach (var elem in _graph[v]) {
+
+                if (_visited[elem.Key] == false) {
+
+                    continue;
+                }
+
+            }
+
+            return res;
+        }
+
+
+        public double Ford_Fulkerson(string src, string dst) {
+
+            while (true) {
+
+                List<Edje> path = new List<Edje>();
+                VisitedSet();
+                if (!Dfs(src, dst, ref path)) {
+
+                    break;
+                }
+                int min_flow = 1;
+                foreach (var edj in path) {
+
+                    edj.flow += min_flow;
+                    Edje antiedj = get_edje(src, dst);
+                    antiedj.flow -= min_flow;
+                }
+            }
+            double res = 0.0;
+            foreach (var el in _graph[src])
+            {
+                foreach (var edj in _edges) {
+
+                    if (edj.start == src && edj.end == el.Key) {
+                        res += edj.flow;
+                    }
+                }
+            }
+            return res;
+
+        }
 
 
 
+       
         #endregion
 
 

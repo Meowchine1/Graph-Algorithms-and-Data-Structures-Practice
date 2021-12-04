@@ -8,7 +8,8 @@ namespace AtdGraph
     {
         public string start;
         public string end;
-        public double weight;
+        public double weight; // пропускная способность
+        public double flow;   // поток через дугу  
         public int CompareTo(Edje x)
         {
             if (weight < x.weight)
@@ -20,6 +21,10 @@ namespace AtdGraph
                 return 1;
             }
             return 0;
+        }
+
+        public double residual_flow() {
+            return weight - flow;
         }
     }
 }
